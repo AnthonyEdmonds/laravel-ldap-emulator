@@ -23,13 +23,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Anthonyedmonds\\LaravelLdapEmulator\\": "src/"
+            "AnthonyEdmonds\\LaravelLdapEmulator\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "AnthonyEdmonds\\GovukLaravel\\Providers\\GovukServiceProvider"
+                "AnthonyEdmonds\\LaravelLdapEmulator\\Providers\\LdapEmulatorServiceProvider"
             ]
         }
     },

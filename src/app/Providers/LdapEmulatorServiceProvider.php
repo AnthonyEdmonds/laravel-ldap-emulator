@@ -1,6 +1,6 @@
 <?php
 
-namespace AnthonyEdmonds\LdapEmulator\Providers;
+namespace AnthonyEdmonds\LaravelLdapEmulator\Providers;
 
 use Illuminate\Auth\Events\Attempting;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +26,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            'ldap-emulator.php' => config_path('ldap-emulator.php'),
+            __DIR__.'/../../config/ldap-emulator.php' => config_path('ldap-emulator.php'),
         ], 'ldap-emulator');
 
         if ($this->app->isLocal() === true) {
