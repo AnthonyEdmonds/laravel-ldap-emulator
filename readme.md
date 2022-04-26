@@ -10,7 +10,7 @@ Supports roles provided by [Spatie's Laravel Permission](https://spatie.be/docs/
 
 ## Installation
 
-Add the library via Composer: `composer require anthonyedmonds/laravel-ldap-emulator`
+Add the library via Composer: `composer require anthonyedmonds/laravel-ldap-emulator --dev`
 
 Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator"`
 
