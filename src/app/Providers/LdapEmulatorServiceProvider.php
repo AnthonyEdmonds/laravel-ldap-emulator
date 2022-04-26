@@ -49,7 +49,8 @@ class LdapEmulatorServiceProvider extends ServiceProvider
 
     public static function start(): void
     {
-        DirectoryEmulator::setup('default', [
+        DirectoryEmulator::setup(
+            config('ldap.default'), [
             'database' => database_path('ldap.sqlite')
         ]);
 
