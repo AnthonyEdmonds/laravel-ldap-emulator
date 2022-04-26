@@ -1,0 +1,41 @@
+{
+    "name": "anthonyedmonds/laravel-ldap-emulator",
+    "description": "Automatically boot an LDAP emulator while working in a local environment.",
+    "keywords": ["laravel", "ldap", "active directory", "emulator"],
+    "type": "library",
+    "homepage": "https://github.com/AnthonyEdmonds/laravel-ldap-emulator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anthony Edmonds",
+            "email": "contact@anthonyedmonds.me",
+            "homepage": "https://anthonyedmonds.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8",
+        "directorytree/ldaprecord-laravel": "^2",
+        "spatie/laravel-permission": "^5.5"
+    },
+    "require-dev": {
+        "illuminate/support": "^9.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anthonyedmonds\\LaravelLdapEmulator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AnthonyEdmonds\\GovukLaravel\\Providers\\GovukServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
