@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "AnthonyEdmonds\\LaravelLdapEmulator\\": "src/"
+            "AnthonyEdmonds\\LaravelLdapEmulator\\": "src/app"
         }
     },
     "extra": {
