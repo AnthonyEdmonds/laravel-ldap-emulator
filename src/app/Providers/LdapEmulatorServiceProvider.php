@@ -50,9 +50,8 @@ class LdapEmulatorServiceProvider extends ServiceProvider
     public static function start(): void
     {
         DirectoryEmulator::setup(
-            config('ldap.default'), [
-            'database' => database_path('ldap.sqlite')
-        ]);
+            config('ldap.default')
+        );
 
         $laravelModel = config('ldap-emulator.laravel-user-model');
         $ldapModel = config('ldap-emulator.ldap-user-model');
@@ -81,37 +80,39 @@ class LdapEmulatorServiceProvider extends ServiceProvider
             return;
         }
 
-        foreach ($users as $user) {
-            self::setupLocalUser($user, $model, $usernameKey, $password);
-        }
-    }
+        $importable = array_filter($users, function ($user) {
+            return $user['import'] === true;
+        });
 
-    protected static function setupLocalUser(array $details, string $model, string $usernameKey, string $password): void
-    {
-        if ($details['import'] ?? false !== true) {
-            return;
-        }
+        $existing = $model::withTrashed()
+            ->whereIn($usernameKey, array_column($importable, $usernameKey))
+            ->pluck($usernameKey);
 
-        self::assignRoles(
-            self::makeLocalUser($details, $model, $usernameKey, $password),
-            $details['roles'] ?? []
-        );
+        $toImport = array_filter($importable, function ($user) use ($existing) {
+            return $existing->contains($user['username']) === false;
+        });
+
+        foreach ($toImport as $user) {
+            self::assignRoles(
+                self::makeLocalUser($user, $model, $usernameKey, $password),
+                $details['roles'] ?? []
+            );
+        }
     }
 
     protected static function makeLocalUser(array $details, string $model, string $usernameKey, string $password): Model
     {
-        return $model::withTrashed()
-            ->updateOrCreate(
-                [
-                    $usernameKey => $details['username'],
-                ],
-                array_merge(
-                    $details['laravel-attributes'],
-                    [
-                        'password' => $password,
-                    ]
-                )
-            );
+        $user = new $model();
+
+        foreach ($details['laravel-attributes'] as $key => $value) {
+            $user->$key = $value;
+        }
+
+        $user->$usernameKey = $details['username'];
+        $user->password = $password;
+        $user->save();
+
+        return $user;
     }
 
     protected static function assignRoles(Model $user, array $roles = []): void

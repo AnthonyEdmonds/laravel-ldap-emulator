@@ -52,6 +52,8 @@ Beyond configuring the pool of users to add, the system will operate as if it ha
 
 The emulated directory is stored in the `database/ldap.sqlite` file.
 
+Imported users will not be updated once they have been created, however they can be synced when they sign in if LdapRecord is set up to do so.
+
 Note that there some limitations to the functionality of the emulator, which are [described here](https://ldaprecord.com/docs/laravel/v2/testing/#directory-emulator).
 
 ## Roadmap
