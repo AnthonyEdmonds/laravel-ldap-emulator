@@ -95,7 +95,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
         foreach ($toImport as $user) {
             self::assignRoles(
                 self::makeLocalUser($user, $model, $usernameKey, $password),
-                $details['roles'] ?? []
+                $user['roles'] ?? []
             );
         }
     }
