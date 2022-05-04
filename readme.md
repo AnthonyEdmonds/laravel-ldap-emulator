@@ -19,7 +19,7 @@ Due to an issue with boot ordering in LdapRecord, the service provider must be m
 ```php
     public function register(): void
     {
-        if ($this->app->isLocal() === true) {
+        if ($this->app->isProduction() === false) {
             $this->app->bind(LdapEmulatorServiceProvider::class);
         }
     }
