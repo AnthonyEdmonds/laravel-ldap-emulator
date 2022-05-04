@@ -14,15 +14,15 @@ Add the library via Composer: `composer require anthonyedmonds/laravel-ldap-emul
 
 Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator"`
 
-Due to an issue with boot ordering in LdapRecord, the service provider must be manually registered in `config/app.php`:
+Due to an issue with boot ordering in LdapRecord, the service provider must be manually registered in `app/Providers/AppServiceProvider.php`:
 
 ```php
-'providers' => [
-    // Other service providers...
-    
-    // Application Service Providers...
-    AnthonyEdmonds\LaravelLdapEmulator\Providers\LdapEmulatorServiceProvider::class,
-],
+    public function register(): void
+    {
+        if ($this->app->isLocal() === true) {
+            $this->app->bind(LdapEmulatorServiceProvider::class);
+        }
+    }
 ```
 
 ## Configuration
