@@ -20,7 +20,7 @@ Due to an issue with boot ordering in LdapRecord, the service provider must be m
     public function register(): void
     {
         if ($this->app->isProduction() === false) {
-            $this->app->bind(LdapEmulatorServiceProvider::class);
+            $this->app->register(LdapEmulatorServiceProvider::class);
         }
     }
 ```
