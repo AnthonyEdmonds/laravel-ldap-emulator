@@ -23,7 +23,7 @@ Due to an issue with boot ordering in LdapRecord, the service provider must be m
     }
 ```
 
-Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator"`
+Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator\Providers\LdapEmulatorServiceProvider"`
 
 ## Configuration
 
