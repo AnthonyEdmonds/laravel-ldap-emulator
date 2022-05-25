@@ -23,7 +23,7 @@ public function register(): void
 }
 ```
 
-Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator"`
+Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator\Providers\LdapEmulatorServiceProvider"`
 
 ## Configuration
 
