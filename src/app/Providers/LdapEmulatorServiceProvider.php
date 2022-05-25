@@ -4,6 +4,7 @@ namespace AnthonyEdmonds\LaravelLdapEmulator\Providers;
 
 use Illuminate\Auth\Events\Attempting;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
@@ -34,14 +35,20 @@ class LdapEmulatorServiceProvider extends ServiceProvider
             Event::listen(
                 function (Attempting $event) {
                     $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
-                    $model = config('ldap-emulator.ldap-user-model');
-
-                    Container::getDefaultConnection()->actingAs(
-                        $model::findBy($ldapUsernameKey, strtolower($event->credentials[$ldapUsernameKey])),
-                    );
+                    static::setActingUser($event->credentials[$ldapUsernameKey]);
                 }
             );
         }
+    }
+
+    public static function setActingUser(string $username)
+    {
+        $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
+        $model = config('ldap-emulator.ldap-user-model');
+
+        Container::getDefaultConnection()->actingAs(
+            $model::findBy($ldapUsernameKey, strtolower($username)),
+        );
     }
 
     public static function start(): void
@@ -61,12 +68,17 @@ class LdapEmulatorServiceProvider extends ServiceProvider
         $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
         $users = config('ldap-emulator.users');
 
-        self::setupLocalUsers($users, $laravelModel, $laravelUsernameKey, $password);
-        self::buildDirectory($users, $ldapModel, $ldapUsernameKey);
+        $ldapUsers = self::buildDirectory($users, $ldapModel, $ldapUsernameKey);
+        self::setupLocalUsers($users, $laravelModel, $laravelUsernameKey, $password, $ldapUsers);
     }
 
-    protected static function setupLocalUsers(array $users, string $model, string $usernameKey, string $password): void
-    {
+    protected static function setupLocalUsers(
+        array $users,
+        string $model,
+        string $usernameKey,
+        string $password,
+        Collection $ldapUsers
+    ): void {
         try {
             DB::connection()->getPdo();
         } catch (Throwable $exception) {
@@ -95,14 +107,19 @@ class LdapEmulatorServiceProvider extends ServiceProvider
 
         foreach ($toImport as $user) {
             self::assignRoles(
-                self::makeLocalUser($user, $model, $usernameKey, $password),
+                self::makeLocalUser($user, $model, $usernameKey, $password, $ldapUsers),
                 $user['roles'] ?? []
             );
         }
     }
 
-    protected static function makeLocalUser(array $details, string $model, string $usernameKey, string $password): Model
-    {
+    protected static function makeLocalUser(
+        array $details,
+        string $model,
+        string $usernameKey,
+        string $password,
+        Collection $ldapUsers
+    ): Model {
         $user = new $model();
 
         foreach ($details['laravel-attributes'] as $key => $value) {
@@ -111,6 +128,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
 
         $user->$usernameKey = $details['username'];
         $user->password = $password;
+        $user->guid = $ldapUsers->get($details['username'])->fresh()->getObjectGuid();
         $user->save();
 
         return $user;
@@ -127,11 +145,15 @@ class LdapEmulatorServiceProvider extends ServiceProvider
         }
     }
 
-    protected static function buildDirectory(array $users, string $model, string $usernameKey): void
+    protected static function buildDirectory(array $users, string $model, string $usernameKey): Collection
     {
+        $ldapUsers = new Collection();
+
         foreach ($users as $user) {
-            self::makeLdapUser($user, $model, $usernameKey);
+            $ldapUsers->put($user['username'], self::makeLdapUser($user, $model, $usernameKey));
         }
+
+        return $ldapUsers;
     }
 
     protected static function makeLdapUser(array $details, string $model, string $usernameKey): LdapModel

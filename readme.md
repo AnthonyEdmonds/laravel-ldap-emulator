@@ -15,12 +15,12 @@ Add the library via Composer: `composer require anthonyedmonds/laravel-ldap-emul
 Due to an issue with boot ordering in LdapRecord, the service provider must be manually registered in `app/Providers/AppServiceProvider.php`:
 
 ```php
-    public function register(): void
-    {
-        if ($this->app->isProduction() === false) {
-            $this->app->register(LdapEmulatorServiceProvider::class);
-        }
+public function register(): void
+{
+    if ($this->app->isProduction() === false) {
+        $this->app->register(LdapEmulatorServiceProvider::class);
     }
+}
 ```
 
 Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator"`
@@ -50,11 +50,28 @@ When the `APP_ENV` key of your system is set to `local` an LDAP emulator instanc
 
 Beyond configuring the pool of users to add, the system will operate as if it had an LDAP server connected.
 
-The emulated directory is stored in the `database/ldap.sqlite` file.
-
 Imported users will not be updated once they have been created, however they can be synced when they sign in if LdapRecord is set up to do so.
 
 Note that there some limitations to the functionality of the emulator, which are [described here](https://ldaprecord.com/docs/laravel/v2/testing/#directory-emulator).
+
+## Authentication
+
+When a call to `Auth::attempt()` is made, the `Attempting` event is fired and the LdapUser attempting to log in will be allowed to sign-in.
+
+If you use a library that first calls `Auth::validate()`, such as Laravel Fortify, you will need to call the `setActingUser()` method first:
+
+```php
+Fortify::authenticateUsing(function ($request) {
+    LdapEmulatorServiceProvider::setActingUser($request->username);
+
+    $validated = Auth::validate([
+        'samaccountname' => $request->username,
+        'password' => $request->password,
+    ]);
+
+    return $validated ? Auth::getLastAttempted() : null;
+});
+```
 
 ## Roadmap
 
