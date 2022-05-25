@@ -17,10 +17,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/../../config/ldap-emulator.php',
-            'ldap-emulator'
-        );
+        //
     }
 
     public function boot(): void
@@ -52,6 +49,10 @@ class LdapEmulatorServiceProvider extends ServiceProvider
         DirectoryEmulator::setup(
             config('ldap.default')
         );
+
+        if (file_exists(config_path('ldap-emulator.php')) === false) {
+            return;
+        }
 
         $laravelModel = config('ldap-emulator.laravel-user-model');
         $ldapModel = config('ldap-emulator.ldap-user-model');
