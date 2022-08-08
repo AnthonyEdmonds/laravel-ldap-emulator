@@ -2,6 +2,11 @@
 
 return [
     /*
+     * Whether the emulator is enabled
+     */
+    'enabled' => env('LDAP_EMULATOR_ENABLED', false),
+
+    /*
      * Which User model to use locally
      * Which attribute identifies the user in Laravel
      * What the default local password is

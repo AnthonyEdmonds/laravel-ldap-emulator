@@ -27,11 +27,9 @@ class LdapEmulatorServiceProvider extends ServiceProvider
             __DIR__.'/../../config/ldap-emulator.php' => config_path('ldap-emulator.php'),
         ], 'ldap-emulator');
 
-        if ($this->app->isLocal() === true) {
+        if (config('ldap-emulator.enabled') === true) {
             self::start();
-        }
 
-        if ($this->app->isLocal() === true || $this->app->runningUnitTests() === true) {
             Event::listen(
                 function (Attempting $event) {
                     $ldapUsernameKey = config('ldap-emulator.ldap-username-key');

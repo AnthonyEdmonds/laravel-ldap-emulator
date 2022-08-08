@@ -17,7 +17,7 @@ Due to an issue with boot ordering in LdapRecord, the service provider must be m
 ```php
 public function register(): void
 {
-    if ($this->app->isProduction() === false) {
+    if (config('ldap-emulator.enabled') === true) {
         $this->app->register(LdapEmulatorServiceProvider::class);
     }
 }
@@ -29,14 +29,15 @@ Once installed, export the config: `php artisan vendor:publish --provider="Antho
 
 All configuration can be performed in the published `config/ldap-emulator.php` file.
 
-| Key                  | Expected | Description |
-| -------------------- | -------- | ----------- |
-| laravel-user-model   | string   | The fully qualified name of the Laravel User model |
-| laravel-username-key | string   | Which attribute is used to identify the local User |
-| password             | string   | What to set the default local password to |
-| ldap-user-model      | string   | The fully qualified name of the LdapRecord User model |
-| ldap-username-key    | string   | Which attribute is used to identify the LDAP User |
-| users                | array    | The users to add to LDAP and the local system |
+| Config Key           | .env key              | Expected | Description |
+| -------------------- | --------------------- | -------- | ----------- |
+| enabled              | LDAP_EMULATOR_ENABLED | bool     | Whether the emulator is enabled |
+| laravel-user-model   |                       | string   | The fully qualified name of the Laravel User model |
+| laravel-username-key |                       | string   | Which attribute is used to identify the local User |
+| password             |                       | string   | What to set the default local password to |
+| ldap-user-model      |                       | string   | The fully qualified name of the LdapRecord User model |
+| ldap-username-key    |                       | string   | Which attribute is used to identify the LDAP User |
+| users                |                       | array    | The users to add to LDAP and the local system |
 
 Further instructions on setting up users are provided in the comments.
 
