@@ -63,7 +63,9 @@ If you use a library that first calls `Auth::validate()`, such as Laravel Fortif
 
 ```php
 Fortify::authenticateUsing(function ($request) {
-    LdapEmulatorServiceProvider::setActingUser($request->username);
+    if (config('ldap-emulator.enabled') === true) {
+        LdapEmulatorServiceProvider::setActingUser($request->username);
+    }
 
     $validated = Auth::validate([
         'samaccountname' => $request->username,
