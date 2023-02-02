@@ -29,13 +29,6 @@ class LdapEmulatorServiceProvider extends ServiceProvider
 
         if (config('ldap-emulator.enabled') === true) {
             self::start();
-
-            Event::listen(
-                function (Attempting $event) {
-                    $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
-                    static::setActingUser($event->credentials[$ldapUsernameKey]);
-                }
-            );
         }
     }
 
@@ -68,6 +61,17 @@ class LdapEmulatorServiceProvider extends ServiceProvider
 
         $ldapUsers = self::buildDirectory($users, $ldapModel, $ldapUsernameKey);
         self::setupLocalUsers($users, $laravelModel, $laravelUsernameKey, $password, $ldapUsers);
+        self::setupEvents();
+    }
+    
+    protected static function setupEvents(): void
+    {
+        Event::listen(
+            function (Attempting $event) {
+                $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
+                static::setActingUser($event->credentials[$ldapUsernameKey]);
+            }
+        );
     }
 
     protected static function setupLocalUsers(
