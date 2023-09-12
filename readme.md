@@ -2,7 +2,7 @@
 
 Automatically boot an LDAP emulator while working in a local environment.
 
-Built for [Laravel 9](https://laravel.com/).
+Built for [Laravel](https://laravel.com/).
 
 Based on the LDAP emulation provided by [LDAP Record](https://ldaprecord.com/).
 
