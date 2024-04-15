@@ -12,16 +12,19 @@ Supports roles provided by [Spatie's Laravel Permission](https://spatie.be/docs/
 
 Add the library via Composer: `composer require anthonyedmonds/laravel-ldap-emulator --dev`
 
-Due to an issue with boot ordering in LdapRecord, the service provider must be manually registered in `app/Providers/AppServiceProvider.php`:
+Add the `LdapEmulatorServiceProvider` to `bootstrap/providers.php`:
 
 ```php
-public function register(): void
-{
-    if (config('ldap-emulator.enabled') === true) {
-        $this->app->register(LdapEmulatorServiceProvider::class);
-    }
-}
+use AnthonyEdmonds\LaravelLdapEmulator\Providers\LdapEmulatorServiceProvider;
+
+return [
+    ...
+    LdapEmulatorServiceProvider::class,
+    ...
+];
 ```
+
+If you are manually loading service providers, `LdapEmulatorServiceProvider` must be loaded after `LdapRecord\Laravel\LdapServiceProvider`.
 
 Once installed, export the config: `php artisan vendor:publish --provider="AnthonyEdmonds\LaravelLdapEmulator\Providers\LdapEmulatorServiceProvider"`
 
