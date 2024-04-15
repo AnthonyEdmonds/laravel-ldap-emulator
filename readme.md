@@ -15,11 +15,11 @@ Add the library via Composer: `composer require anthonyedmonds/laravel-ldap-emul
 Add the `LdapEmulatorServiceProvider` to `bootstrap/providers.php`:
 
 ```php
-use AnthonyEdmonds\LaravelLdapEmulator\Providers\LdapEmulatorServiceProvider;
+use AnthonyEdmonds\LaravelLdapEmulator\Providers\ZebLdapEmulatorServiceProvider;
 
 return [
     ...
-    LdapEmulatorServiceProvider::class,
+    ZebLdapEmulatorServiceProvider::class,
     ...
 ];
 ```

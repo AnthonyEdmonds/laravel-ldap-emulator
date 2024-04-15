@@ -29,7 +29,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AnthonyEdmonds\\LaravelLdapEmulator\\Providers\\LdapEmulatorServiceProvider"
+                "AnthonyEdmonds\\LaravelLdapEmulator\\Providers\\ZebLdapEmulatorServiceProvider"
             ]
         }
     },

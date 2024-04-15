@@ -14,7 +14,7 @@ use LdapRecord\Laravel\Testing\DirectoryEmulator;
 use LdapRecord\Models\Model as LdapModel;
 use Throwable;
 
-class LdapEmulatorServiceProvider extends ServiceProvider
+class ZebLdapEmulatorServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
