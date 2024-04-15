@@ -26,6 +26,13 @@
             "AnthonyEdmonds\\LaravelLdapEmulator\\": "src/app"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AnthonyEdmonds\\LaravelLdapEmulator\\Providers\\LdapEmulatorServiceProvider"
+            ]
+        }
+    },
     "config": {
         "sort-packages": true
     },
