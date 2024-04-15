@@ -27,7 +27,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
             __DIR__.'/../../config/ldap-emulator.php' => config_path('ldap-emulator.php'),
         ], 'ldap-emulator');
 
-        if (config('ldap-emulator.enabled') === true) {
+        if (config('ldap-emulator.enabled', false) === true) {
             self::start();
         }
     }
