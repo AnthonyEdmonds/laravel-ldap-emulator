@@ -37,9 +37,10 @@ class LdapEmulatorServiceProvider extends ServiceProvider
         $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
         $model = config('ldap-emulator.ldap-user-model');
 
-        Container::getDefaultConnection()->actingAs(
-            $model::findBy($ldapUsernameKey, strtolower($username)),
-        );
+        $user =  $model::findBy($ldapUsernameKey, strtolower($username));
+        if ($user !== null) {
+            Container::getDefaultConnection()->actingAs($user);
+        }
     }
 
     public static function start(): void
