@@ -14,12 +14,12 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8",
         "directorytree/ldaprecord-laravel": "^3",
         "spatie/laravel-permission": "^6"
     },
     "require-dev": {
-        "illuminate/support": "^11"
+        "illuminate/support": "^12"
     },
     "autoload": {
         "psr-4": {
