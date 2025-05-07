@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use LdapRecord\Container;
 use LdapRecord\Laravel\Testing\DirectoryEmulator;
@@ -69,6 +70,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
     {
         Event::listen(
             function (Attempting $event) {
+                Session::invalidate();
                 $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
                 static::setActingUser($event->credentials[$ldapUsernameKey]);
             }
