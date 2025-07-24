@@ -70,7 +70,7 @@ class LdapEmulatorServiceProvider extends ServiceProvider
     {
         Event::listen(
             function (Attempting $event) {
-                Session::invalidate();
+                Session::regenerate();
                 $ldapUsernameKey = config('ldap-emulator.ldap-username-key');
                 static::setActingUser($event->credentials[$ldapUsernameKey]);
             }
